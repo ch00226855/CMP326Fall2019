@@ -59,6 +59,45 @@ public class HelloWorld {
 		String userInput = scnr.nextLine();
 		System.out.println(userInput);
 		
+		/*
+		 *  Chapter 4: Branches
+		 *  
+		 *  1. if-else
+		 *  
+		 *  2. switch
+		 * 
+		 */
+		// detect gender
+		System.out.println("----------------------------");
+		System.out.println("What is your gender? Female - f, Male - m");
+		char gender = scnr.next().charAt(0); // extract the first character
+		if (gender == 'f') {
+			System.out.println("You are a girl!");
+		} else if (gender == 'm') {
+			System.out.println("You are a boy!");
+		} else {
+			System.out.println("Invalid input.");
+		}
+		
+		switch(gender) {
+		case 'f':
+			System.out.println("You are a girl!");
+			break; // use break to stop java from executing subsequent statements
+		case 'm':
+			System.out.println("You are a boy!");
+			break;
+		default:
+			System.out.println("Invalid input.");
+			break;
+		}
+		
 	}
+	
+	
+	
+	
+	
+	
+	
 
 }
