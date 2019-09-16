@@ -1,4 +1,3 @@
-
 public class Person {
 	
 	private String name;
@@ -8,6 +7,9 @@ public class Person {
 	private char bloodType;
 	private boolean isMale;
 	private boolean isAdult;
+	
+	private static int counter = 0;
+	private int personId; // personId = age * 1000 + counter;
 	
 	// default constructor
 	public Person() {
@@ -19,9 +21,41 @@ public class Person {
 		bloodType = 'O';
 		isMale = true;
 		decideIsAdult();
+		
+//		counter++;
+//		this.personId = age * 1000 + counter;
+		
+		decidePersonId();
+		
 		System.out.println("Person constructed.");
 	}
 	
+	// Add an overloaded constructor
+	public Person(String name,
+				int age,
+				double weight,
+				double height,
+				char bloodType,
+				boolean isMale) {
+		System.out.println("The overloaded constructor is called.");
+		this.name = name;
+		this.age = age;
+		this.weight = weight;
+		this.height = height;
+		this.bloodType = bloodType;
+		this.isMale = isMale;
+		decideIsAdult(); // decide the value for isAdult
+		
+//		counter++;
+//		this.personId = age * 1000 + counter;
+		decidePersonId();
+	}
+	
+	private void decidePersonId() {
+		counter++;
+		this.personId = age * 1000 + counter;
+	}
+
 	private void decideIsAdult() {
 		isAdult = (age >= 18);
 	}
@@ -46,8 +80,12 @@ public class Person {
 		return name;
 	}
 	
-	public void setName(String newName) {
-		name = newName;
+//	public void setName(String newName) {
+//		name = newName;
+//	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public double getWeight() {
@@ -94,13 +132,25 @@ public class Person {
 		return age;
 	}
 	
-	public void setAge(int newAge) {
-		// First, check if newAge is a valid age
-		if (newAge < 0) {
+//	public void setAge(int newAge) {
+//		// First, check if newAge is a valid age
+//		if (newAge < 0) {
+//			System.out.println("Cannot assign negative value to age");
+//		} else {
+//		age = newAge;
+//		}
+//	}
+	
+	public void setAge(int age) {
+		if (age < 0) {
 			System.out.println("Cannot assign negative value to age");
 		} else {
-		age = newAge;
+			this.age = age;
 		}
+	}
+	
+	public int getPersonId() {
+		return personId;
 	}
 	
 }
