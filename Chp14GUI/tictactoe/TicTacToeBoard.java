@@ -140,11 +140,17 @@ public class TicTacToeBoard extends JComponent implements MouseListener {
 		int x = evt.getX();
 		int y = evt.getY();
 		
+		// TODO: End this method unless the mouse click is inside the board.
+//		if (//condition to detect that the click is outside of the board){
+//				return;
+//	}
+		
 		// determine which square should be changed
 		int rowIndex = (y - yBoard) / squareSize;
 		int colIndex = (x - xBoard) / squareSize;
  
 		// modify the corresponding number in pieces
+		// TODO: prevent putting a piece on a non-empty square
 		if (isPlayer1Turn) {
 			pieces[rowIndex][colIndex] = 1;
 			isPlayer1Turn = false; // next time it's player2's turn
@@ -162,6 +168,9 @@ public class TicTacToeBoard extends JComponent implements MouseListener {
 		
 		// repaint the interface
 		repaint();
+		
+		// If the current game ends, ask user if they want another game.
+		askIfContinue();
 		
 		
 	}
@@ -211,6 +220,13 @@ public class TicTacToeBoard extends JComponent implements MouseListener {
 			}
 		}
 		//TODO detect if the board is full but nobody wins
+		// The board is full if there is no zero in the pieces array
+		// If the victoryType is zero, then nobody wins at the time.
+//		if (//condition for full board){
+//				if (victoryType == 0) {
+//					victoryType == 3; // 3 means a tie.
+//				}
+//		}
 	}
 	
 	private void updateScore() {
@@ -231,6 +247,28 @@ public class TicTacToeBoard extends JComponent implements MouseListener {
 				message = player1 + "'s turn";
 			} else {
 				message = player2 + "'s turn";
+			}
+		}
+		// TODO: if victoryType is 3, change message to "Game ends with a tie."
+	}
+	
+	private void askIfContinue() {
+		// Show a dialogbox if the game ends
+		if (victoryType != 0) {
+			int response = JOptionPane.showConfirmDialog(this, "Play again?", "Game Ended",
+									JOptionPane.YES_NO_OPTION);
+			if (response == 0) {// user clicks YES
+				victoryType = 0;
+				isPlayer1Turn = true;
+				pieces = new int[][] {
+					{0, 0, 0},
+					{0, 0, 0},
+					{0, 0, 0}
+				};
+				message = "New Game! " + player1 + "'s turn";
+				repaint();
+			} else { // user clicks NO
+				System.exit(0);
 			}
 		}
 	}
