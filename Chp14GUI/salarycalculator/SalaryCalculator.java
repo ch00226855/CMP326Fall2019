@@ -1,85 +1,139 @@
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.Format;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-public class SalaryCalculator extends JFrame {
+public class SalaryCalculator extends JFrame implements ActionListener,
+										ChangeListener {
 	
-	// Create four components
-	JLabel label1;
-	JLabel label2;
-	JTextField field1;
-	JTextField field2;
+	JLabel wageLabel;
+	JLabel salaryLabel;
+	
+	JTextField wageField;
+	JTextField salaryField;
+	
+	JButton calculateButton;
+	
+	JFormattedTextField salaryField2;
+	
+	JSpinner hourSpinner;
+	int hoursPerWeek;
 	
 	public SalaryCalculator() {
-		// label1
-		label1 = new JLabel("Hourly wage:");
+		wageLabel = new JLabel("Hourly wage:");
+		salaryLabel = new JLabel("Yearly salary:");
 		
-		// label2
-		label2 = new JLabel("Yearly salary:");
+		wageField = new JTextField(15);
+		wageField.setText("0");
+		wageField.setEditable(true);
 		
-		// field1
-		field1 = new JTextField(20); // 20 means that the fields is 20
-									// character long
+		salaryField = new JTextField(15);
+		salaryField.setText("0");
+		salaryField.setEditable(false);
 		
-		// field2
-		field2 = new JTextField(20);
+		// Make the text field listen to user inputs
+		wageField.addActionListener(this);
 		
-		///////////////////////////////////////////////////////////
-		// Put components together using GridBagLayout
-		// 1. Declare GridBagLayout to be the layout manager.
+		calculateButton = new JButton("Calculate");
+		calculateButton.addActionListener(this);
+		
+		Format currency = NumberFormat.getCurrencyInstance(Locale.US);
+		salaryField2 = new JFormattedTextField(currency);
+		salaryField2.setValue(0);
+		salaryField2.setColumns(15);
+		
+		hourSpinner = new JSpinner(new SpinnerNumberModel(40, 0, 120, 10));
+		hourSpinner.addChangeListener(this);
+		hoursPerWeek = 40;
+		
+		
+		/////////////////////////////////////////////////
 		this.setLayout(new GridBagLayout());
 		
-		// 2. Declare a GridBagConstraints object
-		GridBagConstraints constraints = new GridBagConstraints(); 
+		GridBagConstraints constraints = new GridBagConstraints();
 		
-		// 3. Set the constraints for each component
 		constraints.gridx = 0;
 		constraints.gridy = 0;
+		constraints.insets = new Insets(10, 10, 10, 10);
 		
-		// 4. Add the component and the constraints to the frame
-		this.add(label1, constraints);
+		this.add(wageLabel, constraints);
 		
-		// Repeat 3 and 4 for each component
 		constraints.gridx = 1;
 		constraints.gridy = 0;
-		this.add(field1, constraints);
+		constraints.insets = new Insets(10, 10, 10, 10);
 		
-		// add label2
+		this.add(wageField, constraints);
+		
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		this.add(label2, constraints);
+		constraints.insets = new Insets(10, 10, 10, 10);
 		
-		// add field2
+		this.add(salaryLabel, constraints);
+		
 		constraints.gridx = 1;
 		constraints.gridy = 1;
-		this.add(field2, constraints);
-		////////////////////////////////////////////////////////
-		// TODO: move this part to a method that respond to user input.
-		// Calculate yearly salary from user input
-		// 1. read hourly wage
-//		String userInput = field1.getText();
-		String userInput = "20";
-		// 2. convert string to int
-		int hourlyWage = Integer.valueOf(userInput);
-		// 3. calculate yearly salary
-		int yearlySalary = hourlyWage * 40 * 50; // 40 hours per week
-												// 50 weeks per year
-		// 4. display yearly salary in field2
-		field2.setText("" + yearlySalary);
+		constraints.insets = new Insets(10, 10, 10, 10);
+		
+		this.add(salaryField, constraints);
+		
+		constraints.gridx = 0;
+		constraints.gridy = 2;
+		constraints.insets = new Insets(10, 10, 10, 10);
+		
+		this.add(calculateButton, constraints);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 2;
+		constraints.insets = new Insets(10, 10, 10, 10);
+		
+		this.add(salaryField2, constraints);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 3;
+		constraints.insets = new Insets(10, 10, 10, 10);
+		
+		this.add(hourSpinner, constraints);
+		
 		
 	}
 	
 	public static void main(String[] args) {
 		SalaryCalculator window = new SalaryCalculator();
 		window.setTitle("Salary Calculator");
+		window.pack();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		window.setSize(800, 600);
-		window.pack(); // window will choose a proper size to show all components
-		
-//		window.add(comp);
 		window.setVisible(true);
 	}
-	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		// Read hourly wage from wageField
+		String wageString = wageField.getText();
+		int hourlyWage = Integer.parseInt(wageString);
+		// Calculate the yearly salary
+		// Formula: yearly salary = hourly wage * 40 * 50
+//		int yearlySalary = hourlyWage * 40 * 50;
+		int yearlySalary = hourlyWage * hoursPerWeek * 50;
+		
+		// Display yearly salary in salaryField
+		String salaryString = String.format("%d", yearlySalary);
+		salaryField.setText(salaryString);
+		
+		salaryField2.setValue(yearlySalary);
+		
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		
+		hoursPerWeek = ((Number) hourSpinner.getValue()).intValue();
+	}
 
 }
